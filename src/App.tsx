@@ -55,9 +55,27 @@ type Product = {
   id: number;
 };
 
+class Items extends Component<{
+  items: null | Product[];
+}> {
+  render() {
+    if (this.props.items === null) return <div>loader</div>;
+    return (
+      <div className="flex flex-col gap-2">
+        {this.props.items.map((item) => (
+          <div className="border-2" key={item.id}>
+            <div>{item.title}</div>
+            <div>{item.description}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+
 class App extends Component {
   state = {
-    items: [] as Product[],
+    items: null as Product[] | null,
   };
   onClickOrMountSearch = async (v: string) => {
     v = v.trim();
@@ -85,14 +103,7 @@ class App extends Component {
             Throw an error
           </Button>
         </div>
-        <div className="flex flex-col gap-2">
-          {this.state.items.map((item) => (
-            <div className="border-2" key={item.id}>
-              <div>{item.title}</div>
-              <div>{item.description}</div>
-            </div>
-          ))}
-        </div>
+        <Items items={this.state.items} />
       </div>
     );
   }
